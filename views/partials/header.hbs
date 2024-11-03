@@ -1,0 +1,60 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="/css/header.css" />
+  </head>
+  <body>
+    <div class="header">
+      <i class="fas fa-bars menu-icon" onclick="toggleSidebar()">
+      </i>
+      <div class="logo">
+        <a href="#">
+          <img
+            alt="Gmail logo"
+            height="24"
+            src="https://storage.googleapis.com/a1aa/image/oWv8CzJOMUqHLNsSyI7vUejfHXeCbasDdTmzygc7sGHVRaanA.jpg"
+            width="24"
+          />
+          <span>
+            Gmail
+          </span>
+        </a>
+
+      </div>
+      <div class="search-bar">
+        <i class="fas fa-search search-icon">
+        </i>
+        <input placeholder="Tìm kiếm trong thư" type="text" />
+        <i class="fas fa-sliders-h filter-icon">
+        </i>
+      </div>
+      <i class="fas fa-question-circle settings-icon">
+      </i>
+      <i class="fas fa-cog settings-icon">
+      </i>
+      <i class="fas fa-th apps-icon">
+      </i>
+      <div class="profile-icon">
+        <img
+          alt="Profile picture"
+          height="32"
+          src="https://storage.googleapis.com/a1aa/image/eDVclUBU4AXpVyHU3EfC5lHZSvfhhoKwrk3ZsI60RaaXRaanA.jpg"
+          width="32"
+        />
+      </div>
+    </div>
+    <div class="sidebar" id="sidebar">
+      <!-- Sidebar content goes here -->
+      <p>
+        Sidebar content
+      </p>
+    </div>
+    <div class="overlay" id="overlay" onclick="toggleSidebar()">
+    </div>
+    <script>
+      function toggleSidebar() { var sidebar =
+      document.getElementById('sidebar'); var overlay =
+      document.getElementById('overlay'); sidebar.classList.toggle('active');
+      overlay.classList.toggle('active'); }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,78 @@
+<head>
+  <link rel="stylesheet" href="/css/signin.css" />
+  <title>
+    Đăng nhập
+  </title>
+</head>
+<body>
+  <div class="login-container">
+    <div class="img-container">
+      <img
+        alt="Google logo"
+        height="75"
+        src="https://storage.googleapis.com/a1aa/image/ZFfOzV4zIG0QcCuVLIBPIgYr7u5mfskcx3TYpCEIf4kisAYnA.jpg"
+        width="75"
+      />
+    </div>
+    <h1>
+      Đăng nhập
+    </h1>
+    <p>
+      Sử dụng Tài khoản Google của bạn
+    </p>
+    {{! --------Form_Login-------- }}
+    <form method="post">
+      <div class="input-container">
+        <label class="label" for="email">Email</label>
+        <input id="email" name="email" required placeholder="Email hoặc số điện thoại" type="text" />
+      </div>
+      <div class="input-container">
+        <label class="label" for="password">Mật Khẩu</label>
+        <input id="password" name="password" placeholder="" type="password" required />
+         {{#if error}}
+          <p  class="error">{{error}}</p>
+        {{/if}}
+      </div class="input-container">
+       <p>
+      Đây không phải máy tính của bạn? Hãy sử dụng chế độ duyệt web riêng tư để
+      đăng nhập.
+      <a 
+      target="_blank"
+      href="https://support.google.com/accounts/answer/2917834?visit_id=638660437242483289-3872648752&p=signin_privatebrowsing&hl=en&rd=1">
+          
+        Tìm hiểu thêm về cách sử dụng Chế độ khách
+      </a>
+    </p>
+    <div class="buttons">
+     <a href="http://localhost:3356/signup">
+        <button class="secondary" type="button">
+          Tạo tài khoản
+        </button>
+     </a>
+
+      <button type="submit" class="first">
+        Tiếp theo
+      </button>
+
+    </form>
+
+    {{! ---------------------- }}
+  
+    
+    </div>
+    <div class="footer">
+      <div>
+        <select>
+          <option>
+            Tiếng Việt
+          </option>
+          <!-- Add other languages as needed -->
+        </select>
+      </div>
+      <div>
+
+      </div>
+    </div>
+  </div>
+
+</body>
