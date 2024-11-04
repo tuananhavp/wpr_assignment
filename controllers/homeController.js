@@ -17,7 +17,9 @@ const home = async (req, res) => {
          LIMIT ? OFFSET ?`,
       [user.id, emailsPerPage, offset]
     );
-
+    const [users] = await db.query("SELECT * FROM users WHERE id != ?", [
+      user.id,
+    ]);
     // console.log(rows);
     const [totalEmails] = await db.query(
       "SELECT COUNT(*) as count FROM emails WHERE receiver_id = ?",
@@ -26,14 +28,15 @@ const home = async (req, res) => {
 
     const totalPages = Math.ceil(totalEmails[0].count / emailsPerPage);
 
-    res.render("home", {
+    return res.render("home", {
+      users,
       row: rows,
       currentPage: page,
       totalPages: totalPages,
     });
   } catch (error) {
     console.error("Error in home function:", error);
-    res.redirect("/");
+    return res.redirect("/");
   }
 };
 
@@ -53,7 +56,7 @@ const createEmail = async (req, res) => {
       );
       return res.redirect("/");
     }
-    return res.json({ message: "Can not create emails" });
+    return res.redirect("/");
   } catch (error) {
     return res.json({ message: "Can not create emails" });
   }
@@ -135,6 +138,41 @@ const deleteEmailById = async (req, res) => {
   }
 };
 
+const outbox = async (req, res) => {
+  const userId = req.cookies.users.id;
+  const page = parseInt(req.query.page) || 1;
+  const emailsPerPage = 5;
+  const offset = (page - 1) * emailsPerPage;
+  try {
+    const [rows] = await db.query(
+      `SELECT emails.*, receiver.name AS receiver_name, receiver.email AS receiver_email
+       FROM emails
+       JOIN users AS receiver ON emails.receiver_id = receiver.id
+       WHERE emails.sender_id = ?
+       LIMIT ? OFFSET ?`,
+      [userId, emailsPerPage, offset]
+    );
+    const [users] = await db.query("SELECT * FROM users WHERE id != ?", [
+      userId,
+    ]);
+    console.log(rows);
+    const [totalEmails] = await db.query(
+      "SELECT COUNT(*) as count FROM emails WHERE sender_id = ?",
+      [userId]
+    );
+    const totalPages = Math.ceil(totalEmails[0].count / emailsPerPage);
+
+    res.render("outbox", {
+      users,
+      row: rows,
+      currentPage: page,
+      totalPages: totalPages,
+    });
+  } catch (error) {
+    console.error("Error in home function:", error);
+    // res.redirect("/");
+  }
+};
 module.exports = {
   home,
   verifyCookie,
@@ -142,4 +180,5 @@ module.exports = {
   getDetail,
   deleteEmail,
   deleteEmailById,
+  outbox,
 };

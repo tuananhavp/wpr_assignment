@@ -4,6 +4,8 @@ const homeController = require("../controllers/homeController");
 
 router.get("/", homeController.verifyCookie, homeController.home);
 router.post("/post", homeController.verifyCookie, homeController.createEmail);
+router.get("/outbox", homeController.verifyCookie, homeController.outbox);
+
 router.get("/detail/:id", homeController.getDetail);
 router.post("/delete", homeController.deleteEmail);
 router.get("/delete/:id", homeController.deleteEmailById);
