@@ -106,6 +106,9 @@ const signIn = async (req, res, next) => {
   }
 };
 
-const verifyCookie = async (req, res, next) => {};
+const logOut = (req, res) => {
+  res.clearCookie("users");
+  res.redirect("/");
+};
 
-module.exports = { showSignIn, signUp, showSignUp, signIn, verifyCookie };
+module.exports = { showSignIn, signUp, showSignUp, signIn, logOut };

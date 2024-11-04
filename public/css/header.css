@@ -4,7 +4,27 @@ body {
   background-color: #f5f7fa;
 }
 a {
+  margin-top: 5px;
   text-decoration: none;
+  color: black;
+}
+.sidebar-item {
+  color: black;
+  font-weight: bold;
+  font-size: 17px;
+  text-decoration: none;
+  display: block;
+  height: 40px;
+  padding: 8px 0 0 12px;
+  margin-top: 10px;
+}
+.sidebar-item:first-child {
+  margin-top: 100px;
+}
+
+.sidebar-item:hover {
+  background-color: #b3bdca;
+  border-radius: 5px;
 }
 .header {
   display: flex;
@@ -68,8 +88,8 @@ a {
 }
 .header .profile-icon img {
   border-radius: 50%;
-  height: 32px;
-  width: 32px;
+  height: 42px;
+  width: 42px;
 }
 .sidebar {
   position: fixed;
@@ -99,4 +119,18 @@ a {
 }
 .overlay.active {
   display: block;
+}
+
+.actions {
+  text-align: right;
+  width: 20px;
+}
+
+.actions .fa-trash {
+  cursor: pointer;
+  color: #ff0000;
+}
+
+.actions .fa-trash:hover {
+  color: #cc0000;
 }

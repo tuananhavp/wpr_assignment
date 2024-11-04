@@ -1,0 +1,51 @@
+<head>
+  <title>
+    Ứng tuyển vị trí thực tập sinh lập trình web
+  </title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #ffffff; color:
+    #000000; margin: 0; padding: 0; } .container { width: 80%; margin: 0 auto;
+    padding: 20px; } .header { font-size: 24px; font-weight: bold;
+    margin-bottom: 20px; } .profile { display: flex; align-items: center;
+    margin-bottom: 20px; } .profile img { border-radius: 50%; width: 50px;
+    height: 50px; margin-right: 10px; } .profile-info { font-size: 16px; }
+    .profile-info span { display: block; } .profile-info .name { font-weight:
+    bold; } .profile-info .email { color: #666666; } .content { font-size: 16px;
+    line-height: 1.5; } .content .highlight { font-weight: bold; } .footer {
+    margin-top: 20px; } .footer .email-link { color: #0066cc; text-decoration:
+    none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      {{data/subject}}
+    </div>
+    <div class="profile">
+      <img
+        alt="Profile picture of Tuấn Anh"
+        height="50"
+        src="https://static.vecteezy.com/system/resources/thumbnails/009/734/564/small/default-avatar-profile-icon-of-social-media-user-vector.jpg"
+        width="50"
+      />
+      <div class="profile-info">
+        <span class="name">
+          {{data/sender_name}}
+        </span>
+        <span class="email">
+          {{data/sender_email}}
+        </span>
+      </div>
+    </div>
+    <div class="content">
+      <p>
+        {{data/body}}
+      </p>
+    </div>
+    <div class="footer">
+      <a class="email-link" href="mailto:tuananhavp@gmail.com">
+        {{data/sender_email}}
+      </a>
+    </div>
+  </div>
+</body>

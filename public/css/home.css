@@ -7,12 +7,23 @@ body {
   margin-left: 30px;
   width: 95%;
   border-collapse: collapse;
-  height: 70vh;
+  /* height: 70vh; */
+}
+.email-list tbody {
+  max-height: 70vh;
 }
 .email-list th,
 .email-list td {
   padding: 10px;
   border-bottom: 1px solid #ddd;
+}
+.email-list tr {
+  max-height: 45px;
+}
+.email-list tr:hover {
+  background-color: #cfd5dd;
+  border-radius: 5px;
+  cursor: pointer;
 }
 .email-list th {
   background-color: #f1f1f1;
@@ -30,8 +41,15 @@ body {
 .email-list .sender {
   width: 200px;
 }
+.email-list .sender a {
+  display: block;
+  width: 200px;
+}
 .email-list .subject {
-  width: 400px;
+  max-width: 400px; /* Set a maximum width */
+  overflow: hidden; /* Hide overflow */
+  text-overflow: ellipsis; /* Add ellipsis (...) for overflow text */
+  white-space: nowrap; /* Prevent text from wrapping */
 }
 .email-list .date {
   width: 100px;
@@ -56,7 +74,7 @@ body {
   border: none;
 }
 .fixed-tab:hover {
-  opacity: 0.9;
+  opacity: 0.8;
 }
 .email-compose {
   position: fixed;
@@ -140,4 +158,45 @@ body {
 }
 #composeBox {
   display: none;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination a,
+.pagination span {
+  margin: 0 5px;
+  padding: 8px 16px;
+  text-decoration: none;
+  color: #007bff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.pagination a:hover {
+  background-color: #ddd;
+}
+
+.pagination a.active {
+  background-color: #007bff;
+  color: white;
+  border: 1px solid #007bff;
+}
+
+#delete-form button {
+  background-color: #007bff;
+  color: #f1f3f4;
+  border: none;
+  margin: 10px 0 20px 50px;
+  border-radius: 50px;
+  width: 150px;
+  height: 50px;
+  visibility: hidden;
+}
+#delete-form button:hover {
+  opacity: 0.8;
 }

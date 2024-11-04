@@ -1,7 +1,64 @@
+const { json } = require("express");
 const db = require("../dbsetup");
 
-const home = (req, res) => {
-  res.render("home");
+const home = async (req, res) => {
+  try {
+    const user = req.cookies.users;
+    const page = parseInt(req.query.page) || 1;
+    const emailsPerPage = 5;
+    const offset = (page - 1) * emailsPerPage;
+
+    const [rows] = await db.query(
+      `SELECT emails.*, sender.name AS sender_name, receiver.name AS receiver_name
+         FROM emails
+         JOIN users AS sender ON emails.sender_id = sender.id
+         JOIN users AS receiver ON emails.receiver_id = receiver.id
+         WHERE emails.receiver_id = ? 
+         LIMIT ? OFFSET ?`,
+      [user.id, emailsPerPage, offset]
+    );
+
+    // console.log(rows);
+    const [totalEmails] = await db.query(
+      "SELECT COUNT(*) as count FROM emails WHERE receiver_id = ?",
+      [user.id]
+    );
+
+    const totalPages = Math.ceil(totalEmails[0].count / emailsPerPage);
+
+    res.render("home", {
+      row: rows,
+      currentPage: page,
+      totalPages: totalPages,
+    });
+  } catch (error) {
+    console.error("Error in home function:", error);
+    res.redirect("/");
+  }
+};
+
+const createEmail = async (req, res) => {
+  const { email, title, content } = req.body;
+  try {
+    const senderId = req.cookies.users.id;
+    // Verify the email input
+    const [isMatch] = await db.query("SELECT * FROM users WHERE email = ?", [
+      email,
+    ]);
+    if (isMatch && isMatch[0].id != senderId) {
+      // Insert new emails for user
+      await db.query(
+        "INSERT INTO emails (sender_id, receiver_id, subject, body) VALUES (?, ?, ?, ?) ",
+        [senderId, isMatch[0].id, title, content]
+      );
+      return res.redirect("/");
+    }
+    return res.json({ message: "Can not create emails" });
+  } catch (error) {
+    return res.json({ message: "Can not create emails" });
+  }
+
+  //   return res.json({ email, title, content });
 };
 
 const verifyCookie = async (req, res, next) => {
@@ -27,4 +84,62 @@ const verifyCookie = async (req, res, next) => {
   }
 };
 
-module.exports = { home, verifyCookie };
+const getDetail = async (req, res) => {
+  try {
+    emailId = req.params.id;
+    const [post] = await db.query(
+      `SELECT emails.*, sender.name AS sender_name, sender.email AS sender_email, receiver.name AS receiver_name, receiver.email AS receiver_email FROM emails 
+      JOIN users AS sender ON emails.sender_id = sender.id 
+      JOIN users AS receiver ON emails.receiver_id = receiver.id 
+      WHERE emails.id = ? `,
+      [emailId]
+    );
+    const data = post[0];
+    return res.render("detail", {
+      data,
+    });
+  } catch (error) {
+    return res.redirect("/");
+  }
+};
+
+const deleteEmail = async (req, res) => {
+  try {
+    const emailIds = req.body.emailIds;
+    console.log(emailIds);
+    if (!emailIds) {
+      return res.redirect("/home");
+    }
+
+    // Convert emailIds to an array if it's a single value
+    const emailIdsArray = Array.isArray(emailIds) ? emailIds : [emailIds];
+    console.log(emailIdsArray);
+
+    // Delete the selected emails
+    await db.query("DELETE FROM emails WHERE id IN (?)", [emailIdsArray]);
+    res.redirect("/home");
+  } catch (error) {
+    // console.error("Error deleting emails:", error);
+    res.redirect("/");
+  }
+};
+
+const deleteEmailById = async (req, res) => {
+  try {
+    emailId = req.params.id;
+    await db.query("DELETE FROM emails WHERE id IN (?)", [emailId]);
+    const data = post[0];
+    res.redirect("/home");
+  } catch (error) {
+    return res.redirect("/");
+  }
+};
+
+module.exports = {
+  home,
+  verifyCookie,
+  createEmail,
+  getDetail,
+  deleteEmail,
+  deleteEmailById,
+};
