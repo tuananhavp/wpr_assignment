@@ -20,6 +20,12 @@ const home = async (req, res) => {
     const [users] = await db.query("SELECT * FROM users WHERE id != ?", [
       user.id,
     ]);
+
+    const [userNameResult] = await db.query(
+      "SELECT name FROM users WHERE id = ?",
+      [user.id]
+    );
+    const userName = userNameResult[0].name;
     // console.log(rows);
     const [totalEmails] = await db.query(
       "SELECT COUNT(*) as count FROM emails WHERE receiver_id = ?",
@@ -33,6 +39,7 @@ const home = async (req, res) => {
       row: rows,
       currentPage: page,
       totalPages: totalPages,
+      userName,
     });
   } catch (error) {
     console.error("Error in home function:", error);
@@ -109,14 +116,14 @@ const getDetail = async (req, res) => {
 const deleteEmail = async (req, res) => {
   try {
     const emailIds = req.body.emailIds;
-    console.log(emailIds);
+    // console.log(emailIds);
     if (!emailIds) {
       return res.redirect("/home");
     }
 
     // Convert emailIds to an array if it's a single value
     const emailIdsArray = Array.isArray(emailIds) ? emailIds : [emailIds];
-    console.log(emailIdsArray);
+    // console.log(emailIdsArray);
 
     // Delete the selected emails
     await db.query("DELETE FROM emails WHERE id IN (?)", [emailIdsArray]);
@@ -155,11 +162,18 @@ const outbox = async (req, res) => {
     const [users] = await db.query("SELECT * FROM users WHERE id != ?", [
       userId,
     ]);
-    console.log(rows);
+
     const [totalEmails] = await db.query(
       "SELECT COUNT(*) as count FROM emails WHERE sender_id = ?",
       [userId]
     );
+
+    // Fetch the user's name
+    const [userNameResult] = await db.query(
+      "SELECT name FROM users WHERE id = ?",
+      [userId]
+    );
+    const userName = userNameResult[0].name;
     const totalPages = Math.ceil(totalEmails[0].count / emailsPerPage);
 
     res.render("outbox", {
@@ -167,6 +181,7 @@ const outbox = async (req, res) => {
       row: rows,
       currentPage: page,
       totalPages: totalPages,
+      userName,
     });
   } catch (error) {
     console.error("Error in home function:", error);
